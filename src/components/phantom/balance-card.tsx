@@ -22,36 +22,37 @@ export function BalanceCard() {
     );
   }
 
-  if (error) {
-    const isConfigError = error.message === "RPC not configured";
+  // No Helius key configured - show setup message
+  if (!isLoading && balance === null && !error) {
     return (
       <div className="p-5 bg-card border border-border rounded-lg">
         <p className="text-xs text-muted-foreground mb-3">Balance</p>
-        {isConfigError ? (
-          <>
-            <p className="text-sm text-muted-foreground mb-2">
-              Configure Helius API key
-            </p>
-            <a
-              href="https://www.helius.dev"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-xs text-primary hover:underline"
-            >
-              Get free key
-            </a>
-          </>
-        ) : (
-          <>
-            <p className="text-sm text-destructive mb-2">Failed to load</p>
-            <button
-              onClick={refetch}
-              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Retry
-            </button>
-          </>
-        )}
+        <p className="text-sm text-muted-foreground mb-2">
+          Add HELIUS_API_KEY to .env.local
+        </p>
+        <a
+          href="https://www.helius.dev"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-xs text-primary hover:underline"
+        >
+          Get free key
+        </a>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-5 bg-card border border-border rounded-lg">
+        <p className="text-xs text-muted-foreground mb-3">Balance</p>
+        <p className="text-sm text-destructive mb-2">Failed to load</p>
+        <button
+          onClick={refetch}
+          className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+        >
+          Retry
+        </button>
       </div>
     );
   }

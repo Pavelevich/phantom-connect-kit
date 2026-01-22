@@ -42,6 +42,14 @@ export function useBalance(address: string | undefined): UseBalanceReturn {
       // Llamar a nuestra API route (key segura en servidor)
       const response = await fetch(`/api/balance?address=${address}`);
 
+      // 503 = RPC not configured (no Helius key) - not an error, just unavailable
+      if (response.status === 503) {
+        setBalance(null);
+        setUsdValue(null);
+        setIsLoading(false);
+        return;
+      }
+
       if (!response.ok) {
         const data = await response.json();
         throw new Error(data.error || "Failed to fetch balance");
