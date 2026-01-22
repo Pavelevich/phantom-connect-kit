@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
+import { rateLimit, getClientIP, rateLimitHeaders } from "@/lib/rate-limit";
 
 // API key se mantiene en servidor, no expuesta al cliente
 const HELIUS_API_KEY = process.env.HELIUS_API_KEY;
+
+// Rate limit: 30 requests per minute per IP
+const RATE_LIMIT = 30;
+const RATE_WINDOW = 60000; // 1 minute
 
 // Validar formato de dirección Solana (base58, 32-44 chars)
 function isValidSolanaAddress(address: string): boolean {
@@ -10,6 +15,17 @@ function isValidSolanaAddress(address: string): boolean {
 }
 
 export async function GET(request: NextRequest) {
+  // Rate limiting
+  const clientIP = getClientIP(request);
+  const rateLimitResult = rateLimit(clientIP, RATE_LIMIT, RATE_WINDOW);
+
+  if (!rateLimitResult.success) {
+    return NextResponse.json(
+      { error: "Too many requests. Please try again later." },
+      { status: 429, headers: rateLimitHeaders(rateLimitResult, RATE_LIMIT) }
+    );
+  }
+
   const searchParams = request.nextUrl.searchParams;
   const address = searchParams.get("address");
 
