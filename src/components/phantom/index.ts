@@ -4,3 +4,4 @@ export { WalletInfo } from "./wallet-info";
 export { BalanceCard } from "./balance-card";
 export { NetworkBadge } from "./network-badge";
 export { TokenList } from "./token-list";
+export { SendSOL } from "./send-sol";
