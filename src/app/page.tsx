@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { usePhantom } from "@phantom/react-sdk";
-import { ConnectButton, WalletInfo, BalanceCard } from "@/components/phantom";
+import { ConnectButton, WalletInfo, BalanceCard, TokenList } from "@/components/phantom";
 
 export default function Home() {
   const { isConnected } = usePhantom();
@@ -113,7 +113,11 @@ function Dashboard() {
         <BalanceCard />
       </div>
 
-      <div className="mt-12 p-6 bg-card border border-border rounded-lg">
+      <div className="mt-4">
+        <TokenList maxItems={5} />
+      </div>
+
+      <div className="mt-8 p-6 bg-card border border-border rounded-lg">
         <p className="text-sm font-medium mb-4">Next steps</p>
         <ul className="space-y-3 text-sm text-muted-foreground">
           <li className="flex items-center gap-3">
